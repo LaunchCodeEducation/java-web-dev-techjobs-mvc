@@ -43,17 +43,7 @@ public class JobData {
         String aValue;
 
         for (Job job : allJobs) {
-            if (field.equals("name")){
-                aValue = job.getName();
-            } else if (field.equals("employer")){
-                aValue = job.getEmployer().toString();
-            } else if (field.equals("location")){
-                aValue = job.getLocation().toString();
-            } else if (field.equals("positionType")){
-                aValue = job.getPositionType().toString();
-            } else {
-                aValue = job.getCoreCompetency().toString();
-            }
+            aValue = getFieldValue(job, field);
 
             if (!values.contains(aValue)) {
                 values.add(aValue);
@@ -83,53 +73,76 @@ public class JobData {
      * with "Enterprise Holdings, Inc".
      *
      * @param column   Column that should be searched.
-     * @param value Value of teh field to search for
+     * @param value Value of the field to search for
      * @return List of all jobs matching the criteria
      */
-    public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
+    public static ArrayList<Job> findByColumnAndValue(String column, String value) {
 
         // load data, if not already loaded
         loadData();
 
-        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        ArrayList<Job> jobs = new ArrayList<>();
 
-        for (HashMap<String, String> row : allJobs) {
+        for (Job job : allJobs) {
 
-            String aValue = row.get(column);
+            String aValue = getFieldValue(job, column);
 
             if (aValue != null && aValue.toLowerCase().contains(value.toLowerCase())) {
-                jobs.add(row);
+                jobs.add(job);
             }
         }
 
         return jobs;
     }
 
+    public static String getFieldValue(Job job, String fieldName){
+        String theValue;
+        if (fieldName.equals("name")){
+            theValue = job.getName();
+        } else if (fieldName.equals("employer")){
+            theValue = job.getEmployer().toString();
+        } else if (fieldName.equals("location")){
+            theValue = job.getLocation().toString();
+        } else if (fieldName.equals("positionType")){
+            theValue = job.getPositionType().toString();
+        } else {
+            theValue = job.getCoreCompetency().toString();
+        }
+
+        return theValue;
+    }
     /**
      * Search all columns for the given term
      *
      * @param value The search term to look for
      * @return      List of all jobs with at least one field containing the value
      */
-    public static ArrayList<HashMap<String, String>> findByValue(String value) {
+    public static ArrayList<Job> findByValue(String value) {
 
         // load data, if not already loaded
         loadData();
 
-        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        ArrayList<Job> jobs = new ArrayList<>();
 
-        for (HashMap<String, String> row : allJobs) {
+        for (Job job : allJobs) {
 
-            for (String key : row.keySet()) {
-                String aValue = row.get(key);
-
-                if (aValue.toLowerCase().contains(value.toLowerCase())) {
-                    jobs.add(row);
-
-                    // Finding one field in a job that matches is sufficient
-                    break;
-                }
+            if (job.getName().toLowerCase().contains(value.toLowerCase())) {
+                jobs.add(job);
+                break;
+            } else if (job.getEmployer().toString().contains(value.toLowerCase())) {
+                jobs.add(job);
+                break;
+            } else if (job.getLocation().toString().contains(value.toLowerCase())) {
+                jobs.add(job);
+                break;
+            } else if (job.getPositionType().toString().contains(value.toLowerCase())) {
+                jobs.add(job);
+                break;
+            } else if (job.getCoreCompetency().toString().contains(value.toLowerCase())) {
+                jobs.add(job);
+                break;
             }
+
         }
 
         return jobs;
@@ -160,20 +173,27 @@ public class JobData {
 
             // Put the records into a more friendly format
             for (CSVRecord record : records) {
-//                HashMap<String, String> newJob = new HashMap<>();
-//
-//                for (String headerLabel : headers) {
-//                    newJob.put(headerLabel, record.get(headerLabel));
-//                }
 
                 Employer anEmployer = new Employer(headers[1]);
+                if (!allEmployers.contains(anEmployer)){
+                    allEmployers.add(anEmployer);
+                }
                 Location aLocation = new Location(headers[2]);
+                if (!allLocations.contains(aLocation)){
+                    allLocations.add(aLocation);
+                }
                 PositionType aPosition = new PositionType(headers[3]);
-                CoreCompetency aCoreCopetency = new CoreCompetency(headers[4]);
+                if (!allPositionTypes.contains(aPosition)){
+                    allPositionTypes.add(aPosition);
+                }
+                CoreCompetency aCoreCompetency = new CoreCompetency(headers[4]);
+                if (!allCoreCompetency.contains(aCoreCompetency)){
+                    allCoreCompetency.add(aCoreCompetency);
+                }
 
-                Job tempJob = new Job(headers[0], anEmployer, aLocation, aPosition, aCoreCopetency);
+                Job newJob = new Job(headers[0], anEmployer, aLocation, aPosition, aCoreCompetency);
 
-                allJobs.add(tempJob);
+                allJobs.add(newJob);
             }
 
             // flag the data as loaded, so we don't do it twice
