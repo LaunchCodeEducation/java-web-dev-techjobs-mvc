@@ -8,13 +8,23 @@
 
     <div class="container body-content">
         <h1 th:text="${#strings.capitalizeWords(title)}"></h1>
-        <h2>View All</h2>
-        <ul>
-            <li th:each="column : ${columns}">
-                <a th:href="@{/list/values(column=${column.key})}" th:text="${column.value}"></a>
-            </li>
-        </ul>
+        <h2 class = "centered">View Jobs By Category</h2>
     </div>
+
+    <table class="centeredTable">
+        <tr>
+            <th:block th:each="column : ${columns}">
+                <th th:text = "${column.value}"></th>
+            </th:block>
+        </tr>
+        <tr>
+            <td th:each="category : ${tableChoices}">
+                <li th:each="item : ${category.value}">
+                    <a th:href="@{/list/jobs(column=${category.key},value=${item})}" th:text="${item}"></a>
+                </li>
+            </td>
+        </tr>
+    </table>
 
 </body>
 </html>

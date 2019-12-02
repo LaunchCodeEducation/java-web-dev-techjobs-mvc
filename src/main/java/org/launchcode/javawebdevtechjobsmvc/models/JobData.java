@@ -7,6 +7,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,12 +21,15 @@ public class JobData {
     private static final String DATA_FILE = "job_data.csv";
     private static boolean isDataLoaded = false;
 
-    //private static ArrayList<HashMap<String, String>> allJobs;
     private static ArrayList<Job> allJobs;
-    private static ArrayList<Employer> allEmployers;
-    private static ArrayList<Location> allLocations;
-    private static ArrayList<PositionType> allPositionTypes;
-    private static ArrayList<CoreCompetency> allCoreCompetency;
+    private static ArrayList<Employer> allEmployers = new ArrayList<>();
+    private static ArrayList<Location> allLocations = new ArrayList<>();
+    private static ArrayList<PositionType> allPositionTypes = new ArrayList<>();
+    private static ArrayList<CoreCompetency> allCoreCompetency = new ArrayList<>();
+    private static ArrayList<String> employerNames = new ArrayList<>();
+    private static ArrayList<String> locations = new ArrayList<>();
+    private static ArrayList<String> skills = new ArrayList<>();
+    private static ArrayList<String> positions = new ArrayList<>();
 
     /**
      * Fetch list of all values from loaded data,
@@ -62,7 +66,7 @@ public class JobData {
         loadData();
 
         // Bonus mission; normal version returns allJobs
-        return new ArrayList<Job>(allJobs);
+        return allJobs;
     }
 
     /**
@@ -83,6 +87,10 @@ public class JobData {
 
         ArrayList<Job> jobs = new ArrayList<>();
 
+        if (column.equals("all")){
+            jobs = findByValue(value);
+            return jobs;
+        }
         for (Job job : allJobs) {
 
             String aValue = getFieldValue(job, column);
@@ -128,19 +136,14 @@ public class JobData {
 
             if (job.getName().toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(job);
-                break;
-            } else if (job.getEmployer().toString().contains(value.toLowerCase())) {
+            } else if (job.getEmployer().toString().toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(job);
-                break;
-            } else if (job.getLocation().toString().contains(value.toLowerCase())) {
+            } else if (job.getLocation().toString().toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(job);
-                break;
-            } else if (job.getPositionType().toString().contains(value.toLowerCase())) {
+            } else if (job.getPositionType().toString().toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(job);
-                break;
-            } else if (job.getCoreCompetency().toString().contains(value.toLowerCase())) {
+            } else if (job.getCoreCompetency().toString().toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(job);
-                break;
             }
 
         }
@@ -174,28 +177,40 @@ public class JobData {
             // Put the records into a more friendly format
             for (CSVRecord record : records) {
 
-                Employer anEmployer = new Employer(headers[1]);
-                if (!allEmployers.contains(anEmployer)){
-                    allEmployers.add(anEmployer);
+                String anEmployer = record.get(1);
+                String aLocation = record.get(2);
+                String aPosition = record.get(3);
+                String aSkill = record.get(4);
+                if (!employerNames.contains(anEmployer)){
+                    employerNames.add(anEmployer);
+                    Employer newEmployer = new Employer(anEmployer);
+                    allEmployers.add(newEmployer);
                 }
-                Location aLocation = new Location(headers[2]);
-                if (!allLocations.contains(aLocation)){
-                    allLocations.add(aLocation);
+                if (!locations.contains(aLocation)){
+                    locations.add(aLocation);
+                    Location newLocation = new Location(aLocation);
+                    allLocations.add(newLocation);
                 }
-                PositionType aPosition = new PositionType(headers[3]);
-                if (!allPositionTypes.contains(aPosition)){
-                    allPositionTypes.add(aPosition);
+                if (!skills.contains(aSkill)){
+                    skills.add(aSkill);
+                    CoreCompetency newSkill = new CoreCompetency(aSkill);
+                    allCoreCompetency.add(newSkill);
                 }
-                CoreCompetency aCoreCompetency = new CoreCompetency(headers[4]);
-                if (!allCoreCompetency.contains(aCoreCompetency)){
-                    allCoreCompetency.add(aCoreCompetency);
+                if (!positions.contains(aPosition)){
+                    positions.add(aPosition);
+                    PositionType newPosition = new PositionType(aPosition);
+                    allPositionTypes.add(newPosition);
                 }
 
-                Job newJob = new Job(headers[0], anEmployer, aLocation, aPosition, aCoreCompetency);
+                Employer newEmployer = new Employer(record.get(1));
+                Location newLocation = new Location(record.get(2));
+                PositionType newPosition = new PositionType(record.get(3));
+                CoreCompetency aCoreCompetency = new CoreCompetency(record.get(4));
+
+                Job newJob = new Job(record.get(0), newEmployer, newLocation, newPosition, aCoreCompetency);
 
                 allJobs.add(newJob);
             }
-
             // flag the data as loaded, so we don't do it twice
             isDataLoaded = true;
 
@@ -205,5 +220,44 @@ public class JobData {
         }
     }
 
+    public static ArrayList<Employer> getAllEmployers() {
+        loadData();
+        return allEmployers;
+    }
+
+    public static ArrayList<Location> getAllLocations() {
+        loadData();
+        return allLocations;
+    }
+
+    public static ArrayList<PositionType> getAllPositionTypes() {
+        loadData();
+        return allPositionTypes;
+    }
+
+    public static ArrayList<CoreCompetency> getAllCoreCompetency() {
+        loadData();
+        return allCoreCompetency;
+    }
+
+    public static ArrayList<String> getEmployerNames() {
+        Collections.sort(employerNames);
+        return employerNames;
+    }
+
+    public static ArrayList<String> getLocations() {
+        Collections.sort(locations);
+        return locations;
+    }
+
+    public static ArrayList<String> getSkills() {
+        Collections.sort(skills);
+        return skills;
+    }
+
+    public static ArrayList<String> getPositions() {
+        Collections.sort(positions);
+        return positions;
+    }
 }
 

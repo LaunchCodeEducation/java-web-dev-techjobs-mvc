@@ -7,7 +7,7 @@
     <div th:replace="fragments :: page-header"></div>
 
     <div class="container body-content">
-        <p>View jobs by:</p>
+        <h2>View jobs by:</h2>
         <ul>
             <li th:each="action : ${actions}">
                 <a th:href="@{'/' + ${action.key}}" th:text="${action.value}"></a>
