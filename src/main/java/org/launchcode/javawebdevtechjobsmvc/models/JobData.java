@@ -49,15 +49,14 @@ public class JobData {
     }
 
     /**
-     * Returns results of search the jobs data by key/value, using
-     * inclusion of the search term.
+     * Returns the results of searching the Jobs data by field and search term.
      *
      * For example, searching for employer "Enterprise" will include results
      * with "Enterprise Holdings, Inc".
      *
-     * @param column   Column that should be searched.
-     * @param value Value of the field to search for
-     * @return List of all jobs matching the criteria
+     * @param column Job field that should be searched.
+     * @param value Value of the field to search for.
+     * @return List of all jobs matching the criteria.
      */
     public static ArrayList<Job> findByColumnAndValue(String column, String value) {
 
@@ -65,6 +64,10 @@ public class JobData {
         loadData();
 
         ArrayList<Job> jobs = new ArrayList<>();
+
+        if (value.toLowerCase().equals("all")){
+            return findAll();
+        }
 
         if (column.equals("all")){
             jobs = findByValue(value);

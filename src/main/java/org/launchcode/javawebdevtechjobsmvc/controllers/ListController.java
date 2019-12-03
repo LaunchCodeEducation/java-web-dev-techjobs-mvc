@@ -49,24 +49,6 @@ public class ListController {
         return "list";
     }
 
-//    @RequestMapping(value = "values")
-//    public String listColumnValues(Model model, @RequestParam String column) {
-//
-//        if (column.equals("all")) {
-//            ArrayList<Job> jobs = JobData.findAll();
-//            model.addAttribute("title", "All Jobs");
-//            model.addAttribute("jobs", jobs);
-//            return "list-jobs";
-//        } else {
-//            ArrayList<String> items = JobData.findAll(column);
-//            model.addAttribute("title", "All " + columnChoices.get(column) + " Values");
-//            model.addAttribute("column", column);
-//            model.addAttribute("items", items);
-//            return "list-column";
-//        }
-//
-//    }
-
     @RequestMapping(value = "jobs")
     public String listJobsByColumnAndValue(Model model, @RequestParam String column, @RequestParam String value) {
         ArrayList<Job> jobs;
