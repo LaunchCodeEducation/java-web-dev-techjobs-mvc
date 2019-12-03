@@ -29,10 +29,6 @@ public class JobData {
     private static ArrayList<Location> allLocations = new ArrayList<>();
     private static ArrayList<PositionType> allPositionTypes = new ArrayList<>();
     private static ArrayList<CoreCompetency> allCoreCompetency = new ArrayList<>();
-    private static ArrayList<String> employerNames = new ArrayList<>();
-    private static ArrayList<String> locations = new ArrayList<>();
-    private static ArrayList<String> skills = new ArrayList<>();
-    private static ArrayList<String> positions = new ArrayList<>();
 
     /**
      * Fetch list of all job objects from loaded data,
@@ -133,6 +129,24 @@ public class JobData {
         return jobs;
     }
 
+    private static boolean doesNotContainObject(ArrayList list, String value){
+        for (Object item : list){
+            if (item.toString().toLowerCase().equals(value.toLowerCase())){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static Object findExistingObject(ArrayList list, String value){
+        for (Object item : list){
+            if (item.toString().toLowerCase().equals(value.toLowerCase())){
+                return item;
+            }
+        }
+        return null;
+    }
+
     /**
      * Read in data from a CSV file and store it in a list
      */
@@ -159,37 +173,47 @@ public class JobData {
             // Put the records into a more friendly format
             for (CSVRecord record : records) {
 
+                String aName = record.get(0);
                 String anEmployer = record.get(1);
                 String aLocation = record.get(2);
                 String aPosition = record.get(3);
                 String aSkill = record.get(4);
-                if (!employerNames.contains(anEmployer)){
-                    employerNames.add(anEmployer);
-                    Employer newEmployer = new Employer(anEmployer);
+
+                Employer newEmployer;
+                Location newLocation;
+                PositionType newPosition;
+                CoreCompetency newSkill;
+
+                if (doesNotContainObject(allEmployers, anEmployer)){
+                    newEmployer = new Employer(anEmployer);
                     allEmployers.add(newEmployer);
+                } else {
+                    newEmployer = (Employer) findExistingObject(allEmployers, anEmployer);
                 }
-                if (!locations.contains(aLocation)){
-                    locations.add(aLocation);
-                    Location newLocation = new Location(aLocation);
+
+                if (doesNotContainObject(allLocations, aLocation)){
+                    newLocation = new Location(aLocation);
                     allLocations.add(newLocation);
+                } else {
+                    newLocation = (Location) findExistingObject(allLocations, aLocation);
                 }
-                if (!skills.contains(aSkill)){
-                    skills.add(aSkill);
-                    CoreCompetency newSkill = new CoreCompetency(aSkill);
+
+                if (doesNotContainObject(allCoreCompetency, aSkill)){
+                    newSkill = new CoreCompetency(aSkill);
                     allCoreCompetency.add(newSkill);
+                } else {
+                    newSkill = (CoreCompetency) findExistingObject(allCoreCompetency, aSkill);
                 }
-                if (!positions.contains(aPosition)){
-                    positions.add(aPosition);
-                    PositionType newPosition = new PositionType(aPosition);
+
+                if (doesNotContainObject(allPositionTypes, aPosition)){
+                    newPosition = new PositionType(aPosition);
                     allPositionTypes.add(newPosition);
+                } else {
+                    newPosition = (PositionType) findExistingObject(allPositionTypes, aPosition);
                 }
 
-                Employer newEmployer = new Employer(record.get(1));
-                Location newLocation = new Location(record.get(2));
-                PositionType newPosition = new PositionType(record.get(3));
-                CoreCompetency aCoreCompetency = new CoreCompetency(record.get(4));
-
-                Job newJob = new Job(record.get(0), newEmployer, newLocation, newPosition, aCoreCompetency);
+                System.out.println(newEmployer.getId());
+                Job newJob = new Job(aName, newEmployer, newLocation, newPosition, newSkill);
 
                 allJobs.add(newJob);
             }
