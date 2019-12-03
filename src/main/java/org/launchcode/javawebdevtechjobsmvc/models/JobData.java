@@ -11,8 +11,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// This is a change made in sandbox.
-
 /**
  * Created by LaunchCode
  */
