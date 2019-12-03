@@ -39,7 +39,7 @@
     <!-- TODO #2 - Loop over jobs map to display all job fields -->
 
     <table class="job-listing">
-        <tr th:each="job, index : ${jobs}" th:class="${index.odd} ? 'odd'">
+        <tr th:each="job : ${jobs}">
             <td>
                 <p th:text="${'ID: ' + job.getId()}"></p>
                 <p th:text="${'Name: ' + job.getName()}"></p>
