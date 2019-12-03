@@ -30,10 +30,10 @@ public class ListController {
         columnChoices.put("positionType", "Position Type");
         columnChoices.put("coreCompetency", "Skill");
         tableChoices.put("all", "View All");
-        tableChoices.put("employer", JobData.getEmployerNames());
-        tableChoices.put("location", JobData.getLocations());
-        tableChoices.put("positionType", JobData.getPositions());
-        tableChoices.put("coreCompetency", JobData.getSkills());
+        tableChoices.put("employer", JobData.getAllEmployers());
+        tableChoices.put("location", JobData.getAllLocations());
+        tableChoices.put("positionType", JobData.getAllPositionTypes());
+        tableChoices.put("coreCompetency", JobData.getAllCoreCompetency());
 
     }
 
@@ -41,10 +41,9 @@ public class ListController {
     public String list(Model model) {
         model.addAttribute("columns", columnChoices);
         model.addAttribute("employers", JobData.getAllEmployers());
-        model.addAttribute("locations", JobData.getLocations());
-        model.addAttribute("positions", JobData.getPositions());
-        model.addAttribute("skills", JobData.getSkills());
-        model.addAttribute("employerNames", JobData.getEmployerNames());
+        model.addAttribute("locations", JobData.getAllLocations());
+        model.addAttribute("positions", JobData.getAllPositionTypes());
+        model.addAttribute("skills", JobData.getAllCoreCompetency());
         model.addAttribute("tableChoices", tableChoices);
 
         return "list";

@@ -3,6 +3,7 @@ package org.launchcode.javawebdevtechjobsmvc.models;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.launchcode.javawebdevtechjobsmvc.NameSorter;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -34,33 +35,9 @@ public class JobData {
     private static ArrayList<String> positions = new ArrayList<>();
 
     /**
-     * Fetch list of all values from loaded data,
-     * without duplicates, for a given column.
-     *
-     * @param field The column to retrieve values from
-     * @return List of all of the values of the given field
+     * Fetch list of all job objects from loaded data,
+     * without duplicates, then return a copy.
      */
-    public static ArrayList<String> findAll(String field) {
-
-        // load data, if not already loaded
-        loadData();
-
-        ArrayList<String> values = new ArrayList<>();
-        String aValue;
-
-        for (Job job : allJobs) {
-            aValue = getFieldValue(job, field);
-
-            if (!values.contains(aValue)) {
-                values.add(aValue);
-            }
-        }
-
-        // Bonus mission: sort the results
-        Collections.sort(values);
-
-        return values;
-    }
 
     public static ArrayList<Job> findAll() {
 
@@ -68,7 +45,7 @@ public class JobData {
         loadData();
 
         // Bonus mission; normal version returns allJobs
-        return allJobs;
+        return new ArrayList<>(allJobs);
     }
 
     /**
@@ -224,42 +201,27 @@ public class JobData {
 
     public static ArrayList<Employer> getAllEmployers() {
         loadData();
+        allEmployers.sort(new NameSorter());
         return allEmployers;
     }
 
     public static ArrayList<Location> getAllLocations() {
         loadData();
+        allLocations.sort(new NameSorter());
         return allLocations;
     }
 
     public static ArrayList<PositionType> getAllPositionTypes() {
         loadData();
+        allPositionTypes.sort(new NameSorter());
         return allPositionTypes;
     }
 
     public static ArrayList<CoreCompetency> getAllCoreCompetency() {
         loadData();
+        allCoreCompetency.sort(new NameSorter());
         return allCoreCompetency;
     }
 
-    public static ArrayList<String> getEmployerNames() {
-        Collections.sort(employerNames);
-        return employerNames;
-    }
-
-    public static ArrayList<String> getLocations() {
-        Collections.sort(locations);
-        return locations;
-    }
-
-    public static ArrayList<String> getSkills() {
-        Collections.sort(skills);
-        return skills;
-    }
-
-    public static ArrayList<String> getPositions() {
-        Collections.sort(positions);
-        return positions;
-    }
 }
 
