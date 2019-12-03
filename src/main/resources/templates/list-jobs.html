@@ -10,46 +10,7 @@
 
     <h1 th:text="${#strings.capitalizeWords(title)}"></h1>
 
-    <!-- TODO #3 - Use the same list display from search.html -->
-    <table class="job-listing">
-        <tr th:each="job : ${jobs}">
-            <td>
-                <p th:text="${'ID: ' + job.id}"></p>
-                <p th:text="${'Name: ' + job.name}"></p>
-                <p th:text="${'Employer: ' + job.employer}"></p>
-                <p th:text="${'Location: ' + job.location}"></p>
-                <p th:text="${'Position Type: ' + job.positionType}"></p>
-                <p th:text="${'Skill: ' + job.coreCompetency}"></p>
-            </td>
-        </tr>
-    </table>
-
-<!--    <table th:each = "job : ${jobs}" class="job-listing">-->
-<!--        <tr>-->
-<!--            <th>ID</th>-->
-<!--            <td th:text="${job.id}"></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <th>Name</th>-->
-<!--            <td th:text="${job.name}"></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <th>Employer</th>-->
-<!--            <td th:text="${job.employer}"></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <th>Location</th>-->
-<!--            <td th:text="${job.location}"></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <th>Position Type</th>-->
-<!--            <td th:text="${job.positionType}"></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <th>Skill</th>-->
-<!--            <td th:text="${job.coreCompetency}"></td>-->
-<!--        </tr>-->
-<!--    </table>-->
+    <!-- TODO #1 - Use a loop to display job results in a table. -->
 
 </div>
 
