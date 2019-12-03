@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
-<head th:replace="fragments :: head">
-</head>
-<body>
+    <head th:replace="fragments :: head"></head>
 
-    <div th:replace="fragments :: page-header"></div>
+    <body>
 
-    <div class="container body-content">
-        <h1 th:text="${#strings.capitalizeWords(title)}"></h1>
-        <h2 class = "centered">View Jobs By Category</h2>
-    </div>
+        <div th:replace="fragments :: page-header"></div>
 
-    <table class="centeredTable">
-        <tr>
-            <th:block th:each="column : ${columns}">
-                <th th:text = "${column.value}"></th>
-            </th:block>
-        </tr>
-        <tr>
-            <!-- TODO #2: Complete the View Jobs By Category Table. -->
+        <div class="container body-content">
+            <h1 th:text="${#strings.capitalizeWords(title)}"></h1>
+            <h2 class = "centered">View Jobs By Category</h2>
+        </div>
 
-            <td></td> <!-- Feel free to remove or modify this element if necessary. -->
+        <table class="centeredTable">
+            <tr>
+                <th:block th:each="column : ${columns}">
+                    <th th:text = "${column.value}"></th>
+                </th:block>
+            </tr>
+            <tr>
+                <!-- TODO #2: Complete the View Jobs By Category Table. -->
 
-            <td th:each="category : ${tableChoices}">
-                <ul>
-                    <li th:each="item : ${category.value}">
-                        <a th:href="@{/list/jobs(column=${category.key},value=${item})}" th:text="${item}"></a>
-                    </li>
-                </ul>
-            </td>
-        </tr>
-    </table>
+                <td></td> <!-- Feel free to remove or modify this element if necessary. -->
 
-</body>
+                <td th:each="category : ${tableChoices}">
+                    <ul>
+                        <li th:each="item : ${category.value}">
+                            <a th:href="@{/list/jobs(column=${category.key},value=${item})}" th:text="${item}"></a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+    </body>
 </html>
