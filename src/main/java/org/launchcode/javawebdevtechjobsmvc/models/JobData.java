@@ -8,10 +8,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 // This is a change made in sandbox.
@@ -98,10 +95,10 @@ public class JobData {
         return theValue;
     }
     /**
-     * Search all columns for the given term
+     * Search all Job fields for the given term.
      *
-     * @param value The search term to look for
-     * @return      List of all jobs with at least one field containing the value
+     * @param value The search term to look for.
+     * @return      List of all jobs with at least one field containing the value.
      */
     public static ArrayList<Job> findByValue(String value) {
 
@@ -129,15 +126,6 @@ public class JobData {
         return jobs;
     }
 
-    private static boolean doesNotContainObject(ArrayList list, String value){
-        for (Object item : list){
-            if (item.toString().toLowerCase().equals(value.toLowerCase())){
-                return false;
-            }
-        }
-        return true;
-    }
-
     private static Object findExistingObject(ArrayList list, String value){
         for (Object item : list){
             if (item.toString().toLowerCase().equals(value.toLowerCase())){
@@ -148,7 +136,7 @@ public class JobData {
     }
 
     /**
-     * Read in data from a CSV file and store it in a list
+     * Read in data from a CSV file and store it in an ArrayList of Job objects.
      */
     private static void loadData() {
 
@@ -179,40 +167,31 @@ public class JobData {
                 String aPosition = record.get(3);
                 String aSkill = record.get(4);
 
-                Employer newEmployer;
-                Location newLocation;
-                PositionType newPosition;
-                CoreCompetency newSkill;
+                Employer newEmployer = (Employer) findExistingObject(allEmployers, anEmployer);
+                Location newLocation = (Location) findExistingObject(allLocations, aLocation);
+                PositionType newPosition = (PositionType) findExistingObject(allPositionTypes, aPosition);
+                CoreCompetency newSkill = (CoreCompetency) findExistingObject(allCoreCompetency, aSkill);
 
-                if (doesNotContainObject(allEmployers, anEmployer)){
+                if (newEmployer == null){
                     newEmployer = new Employer(anEmployer);
                     allEmployers.add(newEmployer);
-                } else {
-                    newEmployer = (Employer) findExistingObject(allEmployers, anEmployer);
                 }
 
-                if (doesNotContainObject(allLocations, aLocation)){
+                if (newLocation == null){
                     newLocation = new Location(aLocation);
                     allLocations.add(newLocation);
-                } else {
-                    newLocation = (Location) findExistingObject(allLocations, aLocation);
                 }
 
-                if (doesNotContainObject(allCoreCompetency, aSkill)){
+                if (newSkill == null){
                     newSkill = new CoreCompetency(aSkill);
                     allCoreCompetency.add(newSkill);
-                } else {
-                    newSkill = (CoreCompetency) findExistingObject(allCoreCompetency, aSkill);
                 }
 
-                if (doesNotContainObject(allPositionTypes, aPosition)){
+                if (newPosition == null){
                     newPosition = new PositionType(aPosition);
                     allPositionTypes.add(newPosition);
-                } else {
-                    newPosition = (PositionType) findExistingObject(allPositionTypes, aPosition);
                 }
 
-                System.out.println(newEmployer.getId());
                 Job newJob = new Job(aName, newEmployer, newLocation, newPosition, newSkill);
 
                 allJobs.add(newJob);

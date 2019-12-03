@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import org.launchcode.javawebdevtechjobsmvc.models.JobData;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
